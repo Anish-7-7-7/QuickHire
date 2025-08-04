@@ -6,8 +6,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 app.use(cors({
-  origin: "https://quick-hire-q20fqv1o3-anishs-projects-45925d4f.vercel.app", // frontend URL
-  credentials: true,               // allow cookies if needed
+  origin: "https://quick-hire-seven.vercel.app", //frontend
+  credentials: true,             
 }));
 
 
