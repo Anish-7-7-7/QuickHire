@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { UserCircle } from "lucide-react";
+import API from "../api/axios";
+import { UserCircle } from "lucide-react"; 
 import MyPosts from "../components/MyPosts";
 
 const Profile = () => {
@@ -9,23 +9,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.error("Token not found in localStorage");
-          return;
-        }
-
-        const baseURL = import.meta.env.VITE_API_URL || "https://your-backend.onrender.com"; // fallback in case env is undefined
-        console.log("Base URL:", baseURL);
-        console.log("Token:", token);
-
-        const res = await axios.get(`${baseURL}/api/v1/getprofile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        });
-
+        const res = await API.get("/api/v1/getprofile");
         setUser(res.data.user);
       } catch (err) {
         console.error("Failed to fetch profile:", err);
@@ -35,10 +19,7 @@ const Profile = () => {
     fetchProfile();
   }, []);
 
-  if (!user)
-    return (
-      <div className="text-center mt-20 text-gray-500">Loading profile...</div>
-    );
+  if (!user) return <div className="text-center mt-20 text-gray-500">Loading profile...</div>;
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg">
