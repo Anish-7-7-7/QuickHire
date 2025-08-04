@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import API from "../api/axios";
-import { UserCircle } from "lucide-react"; 
+import axios from "axios";
+import { UserCircle } from "lucide-react";
 import MyPosts from "../components/MyPosts";
 
 const Profile = () => {
@@ -15,10 +15,15 @@ const Profile = () => {
           return;
         }
 
-        const res = await API.get("/api/v1/getprofile", {
+        const baseURL = import.meta.env.VITE_API_URL || "https://your-backend.onrender.com"; // fallback in case env is undefined
+        console.log("Base URL:", baseURL);
+        console.log("Token:", token);
+
+        const res = await axios.get(`${baseURL}/api/v1/getprofile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          withCredentials: true,
         });
 
         setUser(res.data.user);
@@ -30,7 +35,10 @@ const Profile = () => {
     fetchProfile();
   }, []);
 
-  if (!user) return <div className="text-center mt-20 text-gray-500">Loading profile...</div>;
+  if (!user)
+    return (
+      <div className="text-center mt-20 text-gray-500">Loading profile...</div>
+    );
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg">
@@ -46,7 +54,6 @@ const Profile = () => {
         </div>
       </div>
 
-
       {user.bio && (
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-gray-700 mb-1">Bio</h2>
@@ -54,7 +61,6 @@ const Profile = () => {
         </div>
       )}
 
-    
       {user.skills?.length > 0 && (
         <div className="mb-8">
           <h2 className="text-lg font-semibold text-gray-700 mb-2">Skills</h2>
@@ -71,7 +77,6 @@ const Profile = () => {
         </div>
       )}
 
-  
       <div className="mt-10">
         <h2 className="text-2xl font-bold mb-4 text-gray-800">My Posts</h2>
         <MyPosts />
